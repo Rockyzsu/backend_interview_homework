@@ -1,11 +1,10 @@
-
 const sequelize = require("./db");
 var initModels = require("./init-models");
 const models = initModels(sequelize);
 const Stripe = require("stripe");
 
-const getExpiredTime = "SELECT value from payment_parameters where code = 'expiredMinutes'"
-const selectPaymentServiceByOrderId = "SELECT orderId from payment_PaymentService where orderId =?"
+const getExpiredTime = "SELECT value from payment_parameters where code = 'expiredMinutes'";
+const selectPaymentServiceByOrderId = "SELECT orderId from payment_PaymentService where orderId =?";
 
 const initStripe = async (req, res, next) => {
   let {
@@ -48,7 +47,6 @@ const initStripe = async (req, res, next) => {
       countryId,
     });
   } else {
-
     insertPaymentServiceRes = await models.payment_PaymentService.findOne({
       where: {
         orderId,
@@ -387,7 +385,7 @@ const StripeStatusCheck = async () => {
 const queryStripeOrder = async (req, res, next) => {
   try {
     const tx_id = req.params.tx_id;
-    const rows = await pool.execute("SELECT * FROM transactions WHERE orderId = ?", [tx_id]);
+    const rows = await pool.execute("SELECT * FROM transactions WHERE transactionId = ?", [tx_id]);
     if (row.length === 0) {
       res.status(404).json({ error: "Transaction not found" });
     } else {
